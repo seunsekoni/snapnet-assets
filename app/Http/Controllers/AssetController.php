@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Asset;
+use App\Models\AssetType;
+use App\Models\OwnerType;
 use Illuminate\Http\Request;
+use Session;
 
 class AssetController extends Controller
 {
@@ -14,7 +17,18 @@ class AssetController extends Controller
      */
     public function index()
     {
-        //
+        try
+        {
+            $assets = Asset::orderBy('created_at', 'DESC')->get();
+            Session::flash('success', 'Assets fetched successfully' );
+            return view('welcome', compact('assets'));
+
+        }
+        catch (\Throwable $th)
+        {
+            Session::flash('status', 'Unable to fetch assets' );
+            return back();
+        }
     }
 
     /**
@@ -24,7 +38,9 @@ class AssetController extends Controller
      */
     public function create()
     {
-        //
+        $asset_types = AssetType::all();
+        $owner_types = OwnerType::all();
+        return view('org_asset.create', compact('asset_types', 'owner_types'));
     }
 
     /**
@@ -35,51 +51,27 @@ class AssetController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            
+            $input = $request->only('name', 'asset_type', 'owner_type');
+            
+            $asset = new Asset();
+    
+            $asset->name = $input['name'];
+            $asset->asset_type_id = $input['asset_type'];
+            $asset->owner_type_id = $input['owner_type'];
+    
+            $asset->save();
+    
+            Session::flash('success', 'Assets created successfully' );
+            return redirect()->route('assets');
+        } catch (\Throwable $th) {
+            \Log::error($th);
+            Session::flash('error', 'Unable to create Asset');
+            return back()->withInput();
+        }
+
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Asset  $asset
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Asset $asset)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Asset  $asset
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Asset $asset)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Asset  $asset
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Asset $asset)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Asset  $asset
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Asset $asset)
-    {
-        //
-    }
+    
 }

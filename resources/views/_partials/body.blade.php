@@ -16,11 +16,11 @@
                         aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    <a class="navbar-brand" href="{{ route('user.index') }}">Home</a>
+                    <a class="navbar-brand" href="{{ route('assets') }}">Home</a>
                     <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="{{ route('user.create') }}">New Student</a>
+                                <a class="nav-link active" aria-current="page" href="{{ route('asset.create') }}">New Asset</a>
                             </li>
                             
                         </ul>

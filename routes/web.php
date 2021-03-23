@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\AssetController;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [AssetController::class, 'index'])->name('assets');
+
+Route::get('new/asset', [AssetController::class, 'create'])->name('asset.create');
+
+Route::post('new/asset', [AssetController::class, 'store'])->name('asset.store');
